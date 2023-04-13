@@ -44,7 +44,18 @@ provider:
             #- xray:PutTelemetryRecords
             #- xray:PutTraceSegments
           #Resource: "*"
-
+custom:
+  topicName: ToDosTopic-${self:provider.stage}
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: TodosAPI
+        description: Serverless application for Todos
+    models:
+      - name: CreateTodoRequest
+        contentType: application/json
+        schema: ${file(models/create-todo-model.json)}
 
 functions:
 
@@ -88,9 +99,10 @@ functions:
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
-          #request:
-            #schemas:
-              #application/json: ${file(models/create-todo-model.json)}
+          request:
+            schema:
+              application/json: ${file(models/create-todo-model.json)}
+              
     iamRoleStatements:
     - Effect: Allow
       Action:
@@ -158,7 +170,9 @@ functions:
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
     - Effect: Allow
       Action:
-        - s3:*
+        #- s3:*
+        - s3:GetObject
+        - s3:PutObject
       Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
 
 resources:
