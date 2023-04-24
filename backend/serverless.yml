@@ -120,6 +120,9 @@ functions:
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
+          request:
+            schema:
+              application/json: ${file(models/update-todo-model.json)}
           #documentation:
             #summary: Update a todo
             #description: Update a todo
@@ -170,7 +173,6 @@ functions:
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}
     - Effect: Allow
       Action:
-        #- s3:*
         - s3:GetObject
         - s3:PutObject
       Resource: arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*
