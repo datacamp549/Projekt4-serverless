@@ -11,13 +11,20 @@ import {
   Icon,
   Input,
   Image,
-  Loader
+  Loader,
+  Select
 } from 'semantic-ui-react'
 
 import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
 import Auth from '../auth/Auth'
 import { Todo } from '../types/Todo'
 
+
+const prioOptions = [
+  { key: 'low', value: 'low', text: 'low' },
+  { key: 'medium', value: 'medium', text: 'medium' },
+  { key: 'high', value: 'high', text: 'high' }
+]
 interface TodosProps {
   auth: Auth
   history: History
@@ -27,17 +34,22 @@ interface TodosState {
   todos: Todo[]
   newTodoName: string
   loadingTodos: boolean
+  Priority: string
 }
 
 export class Todos extends React.PureComponent<TodosProps, TodosState> {
   state: TodosState = {
     todos: [],
     newTodoName: '',
+    Priority: '',
     loadingTodos: true
   }
 
   handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ newTodoName: event.target.value })
+  }
+  handlePriorityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ Priority: event.target.value })
   }
 
   onEditButtonClick = (todoId: string) => {
@@ -49,6 +61,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       const dueDate = this.calculateDueDate()
       const newTodo = await createTodo(this.props.auth.getIdToken(), {
         name: this.state.newTodoName,
+        priority: this.state.Priority,
         dueDate
       })
       this.setState({
@@ -77,6 +90,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
       await patchTodo(this.props.auth.getIdToken(), todo.todoId, {
         name: todo.name,
         dueDate: todo.dueDate,
+        priority: todo.priority,
         done: !todo.done
       })
       this.setState({
@@ -116,7 +130,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   renderCreateTodoInput() {
     return (
       <Grid.Row>
-        <Grid.Column width={16}>
+        <Grid.Column width={12}>
           <Input
             action={{
               color: 'teal',
@@ -130,7 +144,14 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
             placeholder="To change the world..."
             onChange={this.handleNameChange}
           />
+          <Input
+            fluid
+            actionPosition="left"
+            placeholder="Priority"
+            onChange={this.handlePriorityChange}
+          />
         </Grid.Column>
+        
         <Grid.Column width={16}>
           <Divider />
         </Grid.Column>
@@ -170,6 +191,9 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
                 {todo.name}
+              </Grid.Column>
+              <Grid.Column width={10} floated="right">
+                {todo.priority}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
                 {todo.dueDate}
