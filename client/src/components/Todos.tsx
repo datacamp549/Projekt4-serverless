@@ -12,7 +12,8 @@ import {
   Input,
   Image,
   Loader,
-  Select
+  Select,
+  Dropdown
 } from 'semantic-ui-react'
 
 import { createTodo, deleteTodo, getTodos, patchTodo } from '../api/todos-api'
@@ -23,7 +24,14 @@ import { Todo } from '../types/Todo'
 const prioOptions = [
   { key: 'low', value: 'low', text: 'low' },
   { key: 'medium', value: 'medium', text: 'medium' },
-  { key: 'high', value: 'high', text: 'high' }
+  { key: 'high', value: 'high', text: 'high' },
+  { key: 'all', value: 'all', text: 'all' }
+]
+const prioOptionsFilter = [
+  { key: 'low', value: 'low', text: 'low' },
+  { key: 'medium', value: 'medium', text: 'medium' },
+  { key: 'high', value: 'high', text: 'high' },
+  { key: 'all', value: 'all', text: 'all' }
 ]
 interface TodosProps {
   auth: Auth
@@ -55,6 +63,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   onEditButtonClick = (todoId: string) => {
     this.props.history.push(`/todos/${todoId}/edit`)
   }
+  
 
   onTodoCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
     try {
@@ -122,6 +131,8 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
         {this.renderCreateTodoInput()}
 
+        {this.renderFilter()}
+
         {this.renderTodos()}
       </div>
     )
@@ -147,7 +158,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
           <Input
             fluid
             actionPosition="left"
-            placeholder="Priority"
+            placeholder="Priority - 'low', medium "
             onChange={this.handlePriorityChange}
           />
         </Grid.Column>
@@ -177,22 +188,36 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     )
   }
 
+  renderFilter() {
+    return (
+      <Grid.Row>
+        <Grid.Column width={12} verticalAlign="middle">
+                <Dropdown
+                placeholder='Select a priority filter'
+                fluid search selection options = {prioOptionsFilter} />
+            </Grid.Column>
+      </Grid.Row>
+    )
+  }
+
   renderTodosList() {
     return (
       <Grid padded>
         {this.state.todos.map((todo, pos) => {
           return (
+            
             <Grid.Row key={todo.todoId}>
+              
               <Grid.Column width={1} verticalAlign="middle">
                 <Checkbox
                   onChange={() => this.onTodoCheck(pos)}
                   checked={todo.done}
                 />
               </Grid.Column>
-              <Grid.Column width={10} verticalAlign="middle">
+              <Grid.Column width={7} verticalAlign="middle">
                 {todo.name}
               </Grid.Column>
-              <Grid.Column width={10} floated="right">
+              <Grid.Column width={3} floated="right">
                 {todo.priority}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
