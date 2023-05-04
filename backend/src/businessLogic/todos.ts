@@ -24,6 +24,7 @@ export async function createTodoItem(
     name: toDoRequest.name,
     createdAt: new Date().toISOString(),
     dueDate:toDoRequest.dueDate,
+    priority:toDoRequest.priority,
     done: false,
   })
 }
