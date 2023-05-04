@@ -39,7 +39,7 @@ export class TodoAccess {
     const items = result.Items
     return items as TodoItem[]
   }
-
+  
   async getTodoItemsByPriority(userId: string, priority: string): Promise<TodoItem[]> {
     const result = await this.docClient.query({
       TableName: this.todoTable,
