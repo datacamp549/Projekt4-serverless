@@ -44,10 +44,12 @@ export class TodoAccess {
     const result = await this.docClient.query({
       TableName: this.todoTable,
       IndexName: this.todoIndex,
+      FilterExpression: 'priority = :priority',
       KeyConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: {
         ':userId': userId,
         ':priority': priority
+        
       }
     })
     .promise()

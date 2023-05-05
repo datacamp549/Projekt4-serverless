@@ -13,7 +13,7 @@ export async function getAllTodoItems(userId: string): Promise<TodoItem[]> {
   return toDoAccess.getAllTodoItems(userId)
 }
 
-export async function getTodoItemsByPriority(userId: string, priority:string): Promise<TodoItem[]> {
+export async function getTodoItemsByPriority(userId: string, priority: string): Promise<TodoItem[]> {
   if (!userId) {
     return []
   }

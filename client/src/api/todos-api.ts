@@ -6,7 +6,7 @@ import { UpdateTodoRequest } from '../types/UpdateTodoRequest';
 
 export async function getTodos(idToken: string): Promise<Todo[]> {
   console.log('Fetching todos')
-  //console.log(`Bearer ${idToken}`)
+  console.log(`Bearer ${idToken}`)
 
   const response = await Axios.get(`${apiEndpoint}/todos`, {
     headers: {

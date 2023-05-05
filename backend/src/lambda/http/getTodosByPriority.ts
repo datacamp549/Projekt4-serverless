@@ -10,7 +10,7 @@ const logger = createLogger('GetAllTodosByPriorityFunction')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Getting Todos', { event });
-  const priority = event.pathParameters.priority
+  const priority = event.queryStringParameters.priority
   const userId = getUserId(event)
   const items = await getTodoItemsByPriority(userId, priority)
 

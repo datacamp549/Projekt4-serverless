@@ -93,7 +93,7 @@ functions:
     events:
       - http:
           method: get
-          path: todos
+          path: todosbypriority
           cors: true
           authorizer: Auth
           reqValidatorName: RequestBodyValidator
