@@ -6,12 +6,13 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import {getTodoItemsByPriority} from '../../businessLogic/todos'
 import {getUserId} from '../utils'
 
-const logger = createLogger('GetAllTodosFunction')
+const logger = createLogger('GetAllTodosByPriorityFunction')
 
 export const handler = middy(async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   logger.info('Getting Todos', { event });
+  const priority = event.pathParameters.priority
   const userId = getUserId(event)
-  const items = await getTodoItemsByPriority(userId, 'low')
+  const items = await getTodoItemsByPriority(userId, priority)
 
   return {
     statusCode: 200,
